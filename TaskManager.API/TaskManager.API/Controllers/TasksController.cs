@@ -49,7 +49,9 @@ namespace TaskManager.API.Controllers
         {
             var id = await _service.CreateAsync(dto.Title, dto.Description);
 
-            return CreatedAtAction(nameof(GetById), new { id }, dto);
+            var task = await _service.GetByIdAsync(id);
+
+            return CreatedAtAction(nameof(GetById), new { id }, task);
         }
 
         /// <summary>
@@ -82,6 +84,13 @@ namespace TaskManager.API.Controllers
             if(!success)
                 return NotFound("Task nao encontrada");
 
+            return NoContent();
+        }
+
+        [HttpDelete("all")]
+        public async Task<IActionResult> DeleteAll()
+        {
+            await _service.DeleteAllAsync();
             return NoContent();
         }
     }

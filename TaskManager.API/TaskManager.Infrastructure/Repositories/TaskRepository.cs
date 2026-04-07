@@ -45,5 +45,11 @@ namespace TaskManager.Infrastructure.Repositories
                 await _context.SaveChangesAsync();
             }
         }
+
+        public async Task DeleteAllAsync()
+        {
+            _context.Tasks.RemoveRange(_context.Tasks);
+            await _context.SaveChangesAsync();
+        }
     }
 }

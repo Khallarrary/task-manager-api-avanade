@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using TaskManager.Application.Interfaces;
@@ -63,6 +64,11 @@ namespace TaskManager.Application.Services
             await _repository.DeleteAsync(id);
 
             return true;    
+        }
+
+        public async Task DeleteAllAsync()
+        {
+            await _repository.DeleteAllAsync();
         }
     }
 }

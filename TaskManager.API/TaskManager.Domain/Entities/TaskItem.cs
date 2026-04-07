@@ -23,6 +23,7 @@ namespace TaskManager.Domain.Entities
 
         public void Update(string title, string description, string status)
         {
+            Console.WriteLine($"UPDATE CHAMADO — status recebido: {status}");
             Title = title;
             Description = description;
             Status = status;

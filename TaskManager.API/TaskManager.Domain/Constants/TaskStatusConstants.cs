@@ -4,7 +4,7 @@ using System.Text;
 
 namespace TaskManager.Domain.Constants
 {
-    internal class TaskStatusConstants
+    public class TaskStatusConstants
     {
         public const string Pendente = "Pendente";
         public const string Concluida = "Concluída";

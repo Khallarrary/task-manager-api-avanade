@@ -1,0 +1,57 @@
+<div class="container">
+
+  <div class="page-header">
+    <h1>Gerenciador de tarefas</h1>
+    <p>Organize e acompanhe suas atividades</p>
+  </div>
+
+  <div class="card">
+    <form #form="ngForm" (ngSubmit)="createTask(form)" class="form">
+      <input name="title" [(ngModel)]="newTask.title"
+             placeholder="Título da tarefa *" required />
+      <input name="description" [(ngModel)]="newTask.description"
+             placeholder="Descrição (opcional)" />
+      <div class="actions">
+        <button type="submit" [disabled]="form.invalid" class="btn primary">
+          + Criar tarefa
+        </button>
+        <button type="button" (click)="deleteAll()" class="btn danger">
+          Apagar tudo
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <div class="filter">
+    <span class="label">Filtrar:</span>
+    <button (click)="filterStatus=''" [class.active]="!filterStatus">Todas</button>
+    <button (click)="filterStatus='Pendente'" [class.active]="filterStatus==='Pendente'">Pendente</button>
+    <button (click)="filterStatus='Concluída'" [class.active]="filterStatus==='Concluída'">Concluída</button>
+    <span class="count">{{ filteredTasks.length }} tarefas</span>
+  </div>
+
+  <p *ngIf="filteredTasks.length === 0" class="empty">
+    Nenhuma tarefa encontrada
+  </p>
+
+  <ul>
+    <li *ngFor="let task of filteredTasks" [class.done]="task.status === 'Concluída'">
+      <div class="task-left">
+        <div class="status-dot" [class.done]="task.status === 'Concluída'"></div>
+        <div class="task-info">
+          <strong>{{ task.title }}</strong>
+          <p *ngIf="task.description">{{ task.description }}</p>
+        </div>
+      </div>
+      <div class="task-actions">
+        <span class="badge" [class.badge-pendente]="task.status === 'Pendente'"
+                            [class.badge-concluida]="task.status === 'Concluída'">
+          {{ task.status }}
+        </span>
+        <button (click)="updateStatus(task, 'Concluída')" title="Marcar como concluída">✔</button>
+        <button (click)="deleteTask(task.id)" title="Deletar">🗑</button>
+      </div>
+    </li>
+  </ul>
+
+</div>

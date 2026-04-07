@@ -5,42 +5,70 @@ using Microsoft.EntityFrameworkCore;
 using TaskManager.Infrastructure.Data;
 using System.Reflection;
 
-var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// ==========================
+// XML para Swagger
+// ==========================
+var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
 
+// ==========================
+// SERVICES
+// ==========================
+
+// Controllers
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+
+// Swagger / OpenAPI
+builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi();
-builder.Services.AddScoped<TaskService>();
-builder.Services.AddScoped<ITaskRepository, TaskRepository>();
-
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(
-        builder.Configuration.GetConnectionString("DefaultConnection")
-    ));
-
 builder.Services.AddSwaggerGen(c =>
 {
     c.IncludeXmlComments(xmlPath);
 });
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
+// CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
+
+// DI (Dependency Injection)
+builder.Services.AddScoped<TaskService>();
+builder.Services.AddScoped<ITaskRepository, TaskRepository>();
+
+// Database
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection")
+    )
+);
+
+// ==========================
+// BUILD
+// ==========================
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// ==========================
+// PIPELINE
+// ==========================
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
+app.UseCors("AllowAll");
+
 app.UseHttpsRedirection();
-app.UseSwagger();
-app.UseSwaggerUI();
+
 app.UseAuthorization();
 
 app.MapControllers();
