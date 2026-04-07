@@ -22,6 +22,12 @@ namespace TaskManager.API.Controllers
             return Ok(tasks);
         }
 
+
+        /// <summary>
+        /// Busca uma tarefa pelo Id
+        /// </summary>
+        /// <response code="200">Tarefa encontrada</response>
+        /// <response code="404">Tarefa não encontrada</response>
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
@@ -33,26 +39,49 @@ namespace TaskManager.API.Controllers
             return Ok(task);
         }
 
+        /// <summary>
+        /// Cria uma nova tarefa
+        /// </summary>
+        /// <response code="201">Tarefa criada com sucesso</response>
+        /// <response code="400">Dados inválidos</response>
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateTaskDto dto)
         {
-            await _service.CreateAsync(dto.Title, dto.Description);
-            return Ok();
+            var id = await _service.CreateAsync(dto.Title, dto.Description);
+
+            return CreatedAtAction(nameof(GetById), new { id }, dto);
         }
 
-
+        /// <summary>
+        /// Atualiza uma tarefa existente
+        /// </summary>
+        /// <response code="204">Tarefa atualizada com sucesso</response>
+        /// <response code="404">Tarefa não encontrada</response>
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] UpdateTaskDto dto) 
         {
-            await _service.UpdateAsync(id, dto.Title, dto.Description, dto.Status);
+            var success = await _service.UpdateAsync(id, dto.Title, dto.Description, dto.Status);
+
+            if(!success)
+                return NotFound("Task nao encontrada");
+
             return NoContent();
         
         }
 
+        /// <summary>
+        /// Remove uma tarefa
+        /// </summary>
+        /// <response code="204">Tarefa removida com sucesso</response>
+        /// <response code="404">Tarefa não encontrada</response>
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            await _service.DeleteAsync(id);
+            var success = await _service.DeleteAsync(id);
+
+            if(!success)
+                return NotFound("Task nao encontrada");
+
             return NoContent();
         }
     }
