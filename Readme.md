@@ -1,4 +1,4 @@
-# 🧠 Task Manager – Full Stack (Angular + .NET)
+# Task Manager – Full Stack (Angular + .NET)
 
 Aplicação web full stack para gerenciamento de tarefas, desenvolvida com **Angular no front-end** e **ASP.NET Core Web API no back-end**, utilizando **SQL Server** como banco de dados.
 
@@ -45,7 +45,7 @@ task-manager-frontend
 
 ---
 
-## ⚙️ Como executar o projeto
+## Como executar o projeto
 
 ### 🔹 1. Clonar o repositório
 
