@@ -49,7 +49,7 @@ task-manager-frontend
 
 ### 🔹 1. Clonar o repositório
 
-git clone https://github.com/seu-usuario/seu-repo.git
+git clone https://github.com/Khallarrary/task-manager-api-avanade
 
 ---
 
